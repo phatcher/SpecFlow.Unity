@@ -15,7 +15,7 @@ namespace SpecFlow.Unity
         {
             runtimePluginEvents.CustomizeGlobalDependencies += (sender, args) =>
             {
-                args.ObjectContainer.RegisterTypeAs<UnityBindingInstanceResolver, IBindingInstanceResolver>();
+                args.ObjectContainer.RegisterTypeAs<UnityBindingInstanceResolver, ITestObjectResolver>();
                 args.ObjectContainer.RegisterTypeAs<ContainerFinder, IContainerFinder>();
             };
 
