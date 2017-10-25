@@ -40,38 +40,46 @@ Install plugin from NuGet into your SpecFlow project.
 
 Create a static method somewhere in the SpecFlow project (recommended to put it into the `Support` folder) that returns a Unity `IUnityContainer` and tag it with the `[ScenarioDependencies]` attribute. Configure your dependencies for the scenario execution within the method. You also have to register the step definition classes, that you can do by either registering all public types from the SpecFlow project:
 
-    container.RegisterAssemblyTypes(typeof(YourClassInTheSpecFlowProject).Assembly, WithMappings.FromMatchingInterface, WithName.Default, WithLifetime.ContainerControlled);
+```csharp
+container.RegisterAssemblyTypes(typeof(YourClassInTheSpecFlowProject).Assembly, WithMappings.FromMatchingInterface, WithName.Default, WithLifetime.ContainerControlled);
+```
 
 or by registering all classes marked with the `[Binding]` attribute:
 
-    builder.RegisterTypes(typeof(TestDependencies).Assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(BindingAttribute))), WithMappings.FromMatchingInterface, WithName.Default, WithLifetime.ContainerControlled);
+```csharp
+builder.RegisterTypes(typeof(TestDependencies).Assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(BindingAttribute))), WithMappings.FromMatchingInterface, WithName.Default, WithLifetime.ContainerControlled);
+```
 
 A typical container creation method probably looks like this:
 
-    [ScenarioDependencies]
-    public static IUnityContainer CreateContainer()
-    {
-      // create container with the runtime dependencies
-      var container = Dependencies.CreateContainer();
+```csharp
+[ScenarioDependencies]
+public static IUnityContainer CreateContainer()
+{
+  // create container with the runtime dependencies
+  var container = Dependencies.CreateContainer();
 
-      //TODO: add customizations, stubs required for testing
+  //TODO: add customizations, stubs required for testing
 
-      // Registers the build steps, this gives us dependency resolution using the container.
-      // NB If you need named parameters into the steps you should override specific registrations
-      container.RegisterTypes(typeof(TestDependencies).Assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(BindingAttribute))), WithMappings.FromMatchingInterface, WithName.Default, WithLifetime.ContainerControlled);
-      
-      return container;
-    }
+  // Registers the build steps, this gives us dependency resolution using the container.
+  // NB If you need named parameters into the steps you should override specific registrations
+  container.RegisterTypes(typeof(TestDependencies).Assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(BindingAttribute))), WithMappings.FromMatchingInterface, WithName.Default, WithLifetime.ContainerControlled);
+
+  return container;
+}
+```
 
 Also don't forget to modify your test App.config to refer to the plugin
 
-    <specFlow>
-        <!-- For additional details on SpecFlow configuration options see http://go.specflow.org/doc-config -->
-        <unitTestProvider name="NUnit" />
-        <runtime stopAtFirstError="false" missingOrPendingStepsOutcome="Inconclusive" />
-        <plugins>
-            <add name="SpecFlow.Unity" type="Runtime" />
-        </plugins>
-    </specFlow>
+```xml
+<specFlow>
+    <!-- For additional details on SpecFlow configuration options see http://go.specflow.org/doc-config -->
+    <unitTestProvider name="NUnit" />
+    <runtime stopAtFirstError="false" missingOrPendingStepsOutcome="Inconclusive" />
+    <plugins>
+        <add name="SpecFlow.Unity" type="Runtime" />
+    </plugins>
+</specFlow>
+```
 
 You must also have at least one step definition in the same assembly as the ScenarioDependencies method for the it to be found.
