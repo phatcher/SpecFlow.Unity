@@ -8,7 +8,7 @@ using TechTalk.SpecFlow.Infrastructure;
 
 namespace SpecFlow.Unity
 {
-    public class UnityBindingInstanceResolver : IBindingInstanceResolver
+    public class UnityBindingInstanceResolver : ITestObjectResolver
     {
         public object ResolveBindingInstance(Type bindingType, IObjectContainer scenarioContainer)
         {
