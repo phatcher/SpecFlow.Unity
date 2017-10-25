@@ -1,7 +1,7 @@
 SpecFlow Unity
 ================
 
-SpecFlow plugin for using Autofac as a dependency injection framework for step definitions.
+SpecFlow plugin for using [Unity](https://www.nuget.org/packages/Unity/) as a dependency injection framework for step definitions.
 
 Currently supports
 
