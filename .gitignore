@@ -9,7 +9,7 @@
 
 
 # Build results
-.fake/
+.vs/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -145,10 +145,16 @@ publish/
 *.[Pp]ublish.xml
 *.azurePubxml
 
+# Build tools/artifacts
+.fake/
+.paket/paket.exe
+paket.restore.targets
+packages/
+paket-files/
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
-**/packages/
+packages/*
 ## TODO: If the tool you use requires repositories.config, also uncomment the next line
 !packages/repositories.config
 

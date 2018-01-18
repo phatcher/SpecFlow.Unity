@@ -5,7 +5,7 @@ SpecFlow plugin for using [Unity](https://www.nuget.org/packages/Unity/) as a de
 
 Currently supports
 
-* SpecFlow v2.1
+* SpecFlow v2.1, v2.2
 * Unity v4.0.1 or above
 
 Available as a NuGet packages [SpecFlow.Unity](https://www.nuget.org/packages/SpecFlow.Unity/)

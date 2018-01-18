@@ -1,12 +1,12 @@
 /// FAKE Build script
 
-#r "packages/FAKE/tools/FakeLib.dll"
+#r "packages/build/FAKE/tools/FakeLib.dll"
 open Fake
 open Fake.AssemblyInfoFile
 open Fake.Git
 open Fake.NuGetHelper
-open Fake.RestorePackageHelper
 open Fake.ReleaseNotesHelper
+open Fake.Testing.NUnit3
 
 // Version info
 let projectName = "SpecFlow.Unity"
@@ -18,22 +18,28 @@ let release = LoadReleaseNotes "RELEASE_NOTES.md"
 
 // Properties
 let buildDir = "./build"
-let toolsDir = getBuildParamOrDefault "tools" "./tools"
-let nugetDir = "./nuget"
+let toolsDir = getBuildParamOrDefault "tools" "packages/build"
+let solutionFile = "SpecFlow.Unity.sln"
 
-let nunitPath = toolsDir @@ "NUnit-2.6.3/bin"
+let nunitPath = toolsDir @@ "/NUnit.ConsoleRunner/tools/nunit3-console.exe"
 
 // Targets
 Target "Clean" (fun _ ->
-    CleanDir buildDir
+    CleanDirs [buildDir;]
 )
 
 Target "PackageRestore" (fun _ ->
-    RestorePackages()
+    !! solutionFile
+    |> MSBuildRelease buildDir "Restore"
+    |> Log "AppBuild-Output: "
 )
 
 Target "SetVersion" (fun _ ->
-    let commitHash = Information.getCurrentHash()
+    let commitHash = 
+        try 
+            Information.getCurrentHash()
+        with
+            | ex -> printfn "Exception! (%s)" (ex.Message); ""
     let infoVersion = String.concat " " [release.AssemblyVersion; commitHash]
     CreateCSharpAssemblyInfo "./code/SolutionInfo.cs"
         [Attribute.Version release.AssemblyVersion
@@ -42,31 +48,26 @@ Target "SetVersion" (fun _ ->
 )
 
 Target "Build" (fun _ ->
-    !! "./code/**/*.csproj"
-    |> MSBuildRelease buildDir "Build"
+    !! solutionFile
+    |> MSBuild buildDir "Build" 
+        [
+            "Configuration", "Release"
+            "Platform", "Any CPU"
+            "PackageVersion", release.AssemblyVersion
+            "PackageReleaseNotes", release.Notes |> toLines
+            "IncludeSymbols", "true"
+        ]
     |> Log "AppBuild-Output: "
 )
 
 Target "Test" (fun _ ->
     !! (buildDir + "/*.Test.dll")
-    |> NUnit (fun p ->
+    |> NUnit3 (fun p ->
        {p with
           ToolPath = nunitPath
-          DisableShadowCopy = true
-          OutputFile = buildDir @@ "TestResults.xml"})
-)
-
-Target "Pack" (fun _ ->
-    let nugetParams p = 
-      { p with 
-          Authors = authors
-          Version = release.AssemblyVersion
-          ReleaseNotes = release.Notes |> toLines
-          OutputPath = buildDir 
-          AccessKey = getBuildParamOrDefault "nugetkey" ""
-          Publish = hasBuildParam "nugetkey" }
-
-    NuGet nugetParams "nuget/SpecFlow.Unity.nuspec"
+          // Oddity as this creates a build directory in the build directory
+          WorkingDir = buildDir
+          ShadowCopy = false})
 )
 
 Target "Release" (fun _ ->
@@ -82,8 +83,8 @@ Target "Default" DoNothing
     ==> "SetVersion"
     ==> "PackageRestore"
     ==> "Build"
+    // ==> "Test"
     ==> "Default"
-    ==> "Pack"
     ==> "Release"
 
 RunTargetOrDefault "Default"
