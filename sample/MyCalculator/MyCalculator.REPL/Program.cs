@@ -1,12 +1,11 @@
 ﻿using System;
-
-using Microsoft.Practices.Unity;
+using Unity;
 
 namespace MyCalculator.REPL
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine();
             Console.WriteLine("MyCalculator REPL -- A SpecFlow Demo app by Gaspar Nagy, http://gasparnagy.com");

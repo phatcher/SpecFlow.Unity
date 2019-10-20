@@ -1,26 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="SpecFlow" Version="2.2.0" />
-    <PackageReference Include="Unity" Version="4.0.1" />
-  </ItemGroup>
+  
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>SpecFlow.Unity</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<PackageId>SpecFlow.Unity</PackageId>
+	  <PackageId>SpecFlow.Unity</PackageId>
+    <Title>SpecFlow Unity integration plugin</Title>
+    <Description>SpecFlow plugin that enables use of Unity for resolving test dependencies</Description>
     <PackageLicenseUrl>http://opensource.org/licenses/mit-license.php</PackageLicenseUrl>
-    <PackageTags>specflow unity</PackageTags>
+    <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/phatcher/SpecFlow.Unity</PackageProjectUrl>
+    <PackageTags>Unity specflow di depedency injection</PackageTags>
     <Authors>Paul Hatcher</Authors>
+    <Copyright>Copyright © 2016 Paul Hatcher</Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\net45\SpecFlow.Unity.SpecFlowPlugin.xml</DocumentationFile>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentation>true</GenerateDocumentation>
   </PropertyGroup>
+  
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs" Link="Properties\SolutionInfo.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SpecFlow" Version="3.0.225" />
+    <PackageReference Include="Unity" Version="5.11.1" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />

@@ -1,17 +1,17 @@
-﻿using Microsoft.Practices.Unity;
-
-using SpecFlow.Unity;
-
+﻿using SpecFlow.Unity;
 using TechTalk.SpecFlow.Infrastructure;
 using TechTalk.SpecFlow.Plugins;
+using TechTalk.SpecFlow.UnitTestProvider;
+using Unity;
 
-[assembly: RuntimePlugin(typeof(UnityPlugin))]
+[assembly: RuntimePlugin(typeof(RuntimePlugin))]
 
 namespace SpecFlow.Unity
 {
-    public class UnityPlugin : IRuntimePlugin
+    public class RuntimePlugin : IRuntimePlugin
     {
-        public void Initialize(RuntimePluginEvents runtimePluginEvents, RuntimePluginParameters runtimePluginParameters)
+        public void Initialize(RuntimePluginEvents runtimePluginEvents, RuntimePluginParameters runtimePluginParameters,
+            UnitTestProviderConfiguration unitTestProviderConfiguration)
         {
             runtimePluginEvents.CustomizeGlobalDependencies += (sender, args) =>
             {
