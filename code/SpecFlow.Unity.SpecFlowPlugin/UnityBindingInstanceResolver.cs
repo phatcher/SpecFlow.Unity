@@ -1,10 +1,7 @@
 ﻿using System;
-
 using BoDi;
-
-using Microsoft.Practices.Unity;
-
 using TechTalk.SpecFlow.Infrastructure;
+using Unity;
 
 namespace SpecFlow.Unity
 {

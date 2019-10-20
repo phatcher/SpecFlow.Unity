@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-
-using Microsoft.Practices.Unity;
-
 using TechTalk.SpecFlow.Bindings;
+using Unity;
 
 namespace SpecFlow.Unity
 {
