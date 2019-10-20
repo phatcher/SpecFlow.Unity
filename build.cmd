@@ -17,7 +17,7 @@ SET FAKE_PATH=packages\build\FAKE\tools\Fake.exe
 SET Platform=
 
 IF [%1]==[] (
-    "%FAKE_PATH%" run "build.fsx" "Default" 
+    "%FAKE_PATH%" "build.fsx" "Default" 
 ) ELSE (
-    "%FAKE_PATH%" run "build.fsx" %* 
+    "%FAKE_PATH%" "build.fsx" %* 
 ) 

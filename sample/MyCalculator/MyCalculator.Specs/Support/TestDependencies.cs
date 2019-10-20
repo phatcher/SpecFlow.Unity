@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 
-using Microsoft.Practices.Unity;
-
 using SpecFlow.Unity;
 
 using TechTalk.SpecFlow;
+using Unity;
+using Unity.RegistrationByConvention;
 
 namespace MyCalculator.Specs.Support
 {
